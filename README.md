@@ -1,3 +1,5 @@
+  <image src="https://github.com/Cuudemi/Articles-Today/blob/main/Articles%20Today%20App.png" width="500">
+
 ## ToDo List:
 
 ### Разработка промежуточного отчёта:
@@ -16,5 +18,3 @@
   - [ ] Сегодняшняя статья
   - [ ] Архив
   - [ ] Настройки
-     
-  <image src="https://www.figma.com/file/8WSdv36VaHyYgtIhddIlfI/Articles-Today-App?type=design&node-id=0-1&mode=design&t=OGAD2SPptL4KhlOx-0">
