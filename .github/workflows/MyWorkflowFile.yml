@@ -31,7 +31,7 @@ jobs:
           channel: 'stable'
 
       - name: Flutter analyze
-      - run: cd \app
+      - run: cd app
       - run: flutter pub get
       - run: flutter analyze
 
