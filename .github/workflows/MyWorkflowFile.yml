@@ -31,9 +31,10 @@ jobs:
           channel: 'stable'
 
       - name: Flutter analyze
-      - run: cd app
-      - run: flutter pub get
-      - run: flutter analyze
+        run: |
+          cd app
+          flutter pub get
+          flutter analyze
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
