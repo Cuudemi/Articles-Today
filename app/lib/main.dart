@@ -22,19 +22,19 @@ class ChooseTopic extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
-          margin: EdgeInsets.all(20.0),
+          margin: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text('Выберите темы, которые вас интересуют:'),
+              const Text('Выберите темы, которые вас интересуют:'),
 
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.amberAccent,
                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
                 ),
-                padding: EdgeInsets.all(20.0),
-                child: Row(
+                padding: const EdgeInsets.all(20.0),
+                child: const Row(
                   children: [
                     Text('Разработка',
                       style:
@@ -55,9 +55,9 @@ class ChooseTopic extends StatelessWidget {
               ),
 
               Container(
-                padding: EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(20.0),
                 color: Colors.orange,
-                child: Row(
+                child: const Row(
                   children: [
                     Text('Научпоп'),
                     Text('Habr'),
@@ -66,9 +66,9 @@ class ChooseTopic extends StatelessWidget {
               ),
 
               Container(
-                padding: EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(20.0),
                 color: Colors.blue,
-                child: Row(
+                child: const Row(
                   children: [
                     Text('Дизайн'),
                     Text('Habr'),
@@ -77,9 +77,9 @@ class ChooseTopic extends StatelessWidget {
               ),
 
               Container(
-                padding: EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(20.0),
                 color: Colors.cyanAccent,
-                child: Row(
+                child: const Row(
                   children: [
                     Text('Менеджмент'),
                     Text('Habr'),
@@ -87,9 +87,9 @@ class ChooseTopic extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(20.0),
                 color: Colors.tealAccent,
-                child: Row(
+                child: const Row(
                   children: [
                     Text('Забота о себе'),
                     Text('Журнал «Кинжал»'),
