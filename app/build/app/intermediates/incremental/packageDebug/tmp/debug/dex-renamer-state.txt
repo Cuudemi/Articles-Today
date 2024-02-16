@@ -1,4 +1,4 @@
-#Sun Feb 11 19:04:57 MSK 2024
+#Fri Feb 16 16:48:37 MSK 2024
 base.0=C\:\\Users\\anaas\\Desktop\\Articles-Today\\app\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
