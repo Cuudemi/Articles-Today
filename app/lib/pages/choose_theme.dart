@@ -189,7 +189,6 @@ class _ChooseThemePageState extends State<ChooseThemePage> {
                     var box = Hive.box('myBox');
 
                     var name = box.get('key');
-                    print('Name: $name');
 
                     Navigator.pushReplacementNamed(context, '/todayArticle');
                   },
