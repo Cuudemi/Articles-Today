@@ -186,9 +186,9 @@ class _ChooseThemePageState extends State<ChooseThemePage> {
                   onPressed: () {
                     // Navigator.pushNamed(context, '/todayArticle');
                     // Navigator.pushNamedAndRemoveUntil(context, '/todayArticle', (route) => false);
-                    var box = Hive.box('myBox');
+                    //var box = Hive.box('myBox');
 
-                    var name = box.get('key');
+                    //var name = box.get('key');
 
                     Navigator.pushReplacementNamed(context, '/todayArticle');
                   },
