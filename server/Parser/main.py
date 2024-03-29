@@ -5,30 +5,27 @@ import requests
 import datetime
 from fake_useragent import UserAgent
 
-ua = UserAgent()
 
-headers = {
-    'accept': 'application/json, text/plain, */*',
-    'user-Agent': ua.google,
-}
+def get_urls() -> dict:
+    ua = UserAgent()
 
-article_dict = {}
+    headers = {
+        'accept': 'application/json, text/plain, */*',
+        'user-Agent': ua.google,
+    }
 
-url = f'https://habr.com/ru/top/daily/'
+    article_dict = {}
 
-req = requests.get(url, headers=headers).text
+    url = f'https://habr.com/ru/flows/develop/articles/'
 
-soup = BeautifulSoup(req, 'lxml')
-all_hrefs_articles = soup.find_all('a', class_='tm-title__link')  # получаем статьи
+    req = requests.get(url, headers=headers).text
 
-for article in all_hrefs_articles:  # проходимся по статьям
-    article_name = article.find('span').text  # собираем названия статей
-    article_link = f'https://habr.com{article.get("href")}'  # ссылки на статьи
-    article_dict[article_name] = article_link
+    soup = BeautifulSoup(req, 'lxml')
+    all_hrefs_articles = soup.find_all('a', class_='tm-title__link')  # получаем статьи
 
-with open(f"articles_{datetime.datetime.now().strftime('%d_%m_%Y')}.json", "w", encoding='utf-8') as f:
-    try:
-        json.dump(article_dict, f, indent=4, ensure_ascii=False)
-        print('Статьи были успешно получены')
-    except:
-        print('Статьи не удалось получить')
+    for article in all_hrefs_articles:  # проходимся по статьям
+        article_name = article.find('span').text  # собираем названия статей
+        article_link = f'https://habr.com{article.get("href")}'  # ссылки на статьи
+        article_dict[article_name] = article_link
+
+    return article_dict
