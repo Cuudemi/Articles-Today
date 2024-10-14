@@ -3,6 +3,7 @@ import 'package:app/pages/choose_theme.dart';
 import 'package:app/pages/today_article.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
