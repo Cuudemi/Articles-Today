@@ -1,6 +1,6 @@
 import 'dart:math';
-//import 'package:hive/hive.dart';
-//import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 
 class ChooseThemePage extends StatefulWidget {
@@ -11,55 +11,83 @@ class ChooseThemePage extends StatefulWidget {
 }
 
 class _ChooseThemePageState extends State<ChooseThemePage> {
+  /// Изменение яркости цвета
   Color increaseColorLightness(Color color, double increment) {
     var hslColor = HSLColor.fromColor(color);
     var newValue = min(max(hslColor.lightness + increment, 0.0), 1.0);
     return hslColor.withLightness(newValue).toColor();
   }
 
-  Color _yellowCurrentColor = const Color(0xFFFFB703);
-  final Color _yellowNoTouchColor = const Color(0xFFFFB703);
-  late Color _yellowTouchColor;
+  final List<Map<String, dynamic>> themes = [
+    {
+      'name': 'Разработка',
+      'source': 'Habr',
+      'defaultColor': const Color(0xFFFFB703),
+    },
+    {
+      'name': 'Научпоп',
+      'source': 'Habr',
+      'defaultColor': const Color(0xFFFB8500),
+    },
+    {
+      'name': 'Дизайн',
+      'source': 'Habr',
+      'defaultColor': const Color(0xFF219EBC),
+    },
+    {
+      'name': 'Менеджмент',
+      'source': 'Habr',
+      'defaultColor': const Color(0xFF8ECAE6),
+    },
+    {
+      'name': 'Забота о себе',
+      'source': 'Журнал Кинжал',
+      'defaultColor': const Color(0xFF3ED9B1),
+    },
+  ];
 
-  Color _orangeCurrentColor = const Color(0xFFFB8500);
-  final Color _orangeNoTouchColor = const Color(0xFFFB8500);
-  late Color _orangeTouchColor;
-
-  Color _blueCurrentColor = const Color(0xFF219EBC);
-  final Color _blueNoTouchColor = const Color(0xFF219EBC);
-  late Color _blueTouchColor;
-
-  Color _skyCurrentColor = const Color(0xFF8ECAE6);
-  final Color _skyNoTouchColor = const Color(0xFF8ECAE6);
-  late Color _skyTouchColor;
-
-  Color _greenCurrentColor = const Color(0xFF3ED9B1);
-  final Color _greenNoTouchColor = const Color(0xFF3ED9B1);
-  late Color _greenTouchColor;
+  late Box themesBox;
+  late List<String> selectedThemes;
 
   @override
+  /// Рассчитывает цвета при инициализации страницы
   void initState() {
     super.initState();
-    _yellowTouchColor = increaseColorLightness(_yellowNoTouchColor, 0.2);
-    _orangeTouchColor = increaseColorLightness(_orangeNoTouchColor, 0.2);
-    _blueTouchColor = increaseColorLightness(_blueNoTouchColor, 0.2);
-    _skyTouchColor = increaseColorLightness(_skyNoTouchColor, 0.2);
-    _greenTouchColor = increaseColorLightness(_greenCurrentColor, 0.2);
+
+    themesBox = Hive.box('themesBox');
+    selectedThemes =
+        List.from(themesBox.get('selectedThemes', defaultValue: []));
+
+    // Установка currentColor в зависимости от наличия тем в selectedThemes
+    for (var theme in themes) {
+      theme['touchColor'] = increaseColorLightness(theme['defaultColor'], 0.2);
+      theme['currentColor'] = selectedThemes.contains(theme['name'])
+          ? theme['touchColor']
+          : theme['defaultColor'];
+    }
   }
 
-  Widget buildTopicButton(
-    Color currentColor,
-    Color noTouchColor,
-    Color touchColor,
-    String buttonText,
-    String subButtonText,
-    void Function() onPressed,
-  ) {
+  /// обработчик нажатия на кнопку
+  void _toggleTheme(String themeName) {
+    setState(() {
+      var theme = themes.firstWhere((t) => t['name'] == themeName);
+      if (theme['currentColor'] == theme['defaultColor']) {
+        theme['currentColor'] = theme['touchColor'];
+        selectedThemes.add(themeName);
+      } else {
+        theme['currentColor'] = theme['defaultColor'];
+        selectedThemes.remove(themeName);
+      }
+    });
+  }
+
+  /// Создание кнопок с цветами
+  Widget buildTopicButton(Map<String, dynamic> theme) {
     return OutlinedButton(
-      onPressed: onPressed,
+      onPressed: () => _toggleTheme(theme['name']),
       style: TextButton.styleFrom(
           foregroundColor: Colors.white,
-          backgroundColor: currentColor,
+          backgroundColor: theme['currentColor'],
           padding: const EdgeInsets.all(20.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
@@ -69,18 +97,19 @@ class _ChooseThemePageState extends State<ChooseThemePage> {
         verticalDirection: VerticalDirection.down,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(buttonText,
+          Text(theme['name'],
               style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
               )),
           const Text('  '),
-          Text(subButtonText,
+          Text(theme['source'],
               style: const TextStyle(
                 fontSize: 15,
                 height: 1.7,
                 fontWeight: FontWeight.bold,
-              )),
+              )
+          ),
         ],
       ),
     );
@@ -92,124 +121,48 @@ class _ChooseThemePageState extends State<ChooseThemePage> {
         backgroundColor: Colors.white,
         body: SafeArea(
             child: Container(
-          margin: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Text('Выберите темы, которые вас интересуют:',
-                  style: TextStyle(
-                    color: Color(0xFF023047),
-                    fontSize: 38,
-                    fontWeight: FontWeight.bold,
-                  )),
-              buildTopicButton(
-                _yellowCurrentColor,
-                _yellowNoTouchColor,
-                _yellowTouchColor,
-                'Разработка',
-                'Habr',
-                () {
-                  setState(() {
-                    if (_yellowCurrentColor == _yellowNoTouchColor) {
-                      _yellowCurrentColor = _yellowTouchColor;
-                    } else if (_yellowCurrentColor == _yellowTouchColor) {
-                      _yellowCurrentColor = _yellowNoTouchColor;
-                    }
-                  });
-                },
-              ),
-              buildTopicButton(
-                _orangeCurrentColor,
-                _orangeNoTouchColor,
-                _orangeTouchColor,
-                'Научпоп',
-                'Habr',
-                () {
-                  setState(() {
-                    if (_orangeCurrentColor == _orangeNoTouchColor) {
-                      _orangeCurrentColor = _orangeTouchColor;
-                    } else if (_orangeCurrentColor == _orangeTouchColor) {
-                      _orangeCurrentColor = _orangeNoTouchColor;
-                    }
-                  });
-                },
-              ),
-              buildTopicButton(
-                _blueCurrentColor,
-                _blueNoTouchColor,
-                _blueTouchColor,
-                'Дизайн',
-                'Habr',
-                () {
-                  setState(() {
-                    if (_blueCurrentColor == _blueNoTouchColor) {
-                      _blueCurrentColor = _blueTouchColor;
-                    } else if (_blueCurrentColor == _blueTouchColor) {
-                      _blueCurrentColor = _blueNoTouchColor;
-                    }
-                  });
-                },
-              ),
-              buildTopicButton(
-                _skyCurrentColor,
-                _skyNoTouchColor,
-                _skyTouchColor,
-                'Менеджмент',
-                'Habr',
-                () {
-                  setState(() {
-                    if (_skyCurrentColor == _skyNoTouchColor) {
-                      _skyCurrentColor = _skyTouchColor;
-                    } else if (_skyCurrentColor == _skyTouchColor) {
-                      _skyCurrentColor = _skyNoTouchColor;
-                    }
-                  });
-                },
-              ),
-              buildTopicButton(
-                _greenCurrentColor,
-                _greenNoTouchColor,
-                _greenTouchColor,
-                'Забота о себе',
-                'Habr',
-                () {
-                  setState(() {
-                    if (_greenCurrentColor == _greenNoTouchColor) {
-                      _greenCurrentColor = _greenTouchColor;
-                    } else if (_greenCurrentColor == _greenTouchColor) {
-                      _greenCurrentColor = _greenNoTouchColor;
-                    }
-                  });
-                },
-              ),
-              OutlinedButton(
-                  onPressed: () {
-                    // Navigator.pushNamed(context, '/todayArticle');
-                    // Navigator.pushNamedAndRemoveUntil(context, '/todayArticle', (route) => false);
-                    //var box = Hive.box('myBox');
-
-                    //var name = box.get('key');
-
-                    Navigator.pushReplacementNamed(context, '/todayArticle');
-                  },
-                  style: TextButton.styleFrom(
-                      foregroundColor: const Color(0xFF023047),
-                      backgroundColor: Colors.white,
-                      padding: const EdgeInsets.all(20.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                margin: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Text(
+                      'Выберите темы, которые вас интересуют:',
+                      style: TextStyle(
+                        color: Color(0xFF023047),
+                        fontSize: 38,
+                        fontWeight: FontWeight.bold,
                       ),
-                      side: const BorderSide(width: 3.0, color: Colors.black)),
-                  child: const Align(
-                    alignment: Alignment.center,
-                    child: Text("Подтвердить темы и продолжить",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ))
-            ],
-          ),
-        )));
+                    ),
+                    ...themes.map(buildTopicButton).toList(),
+
+                    /// Кнопка для подтверждения перехода
+                    OutlinedButton(
+                        onPressed: () {
+                          themesBox.put('selectedThemes', selectedThemes);
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/todayArticle', (route) => false);
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: const Color(0xFF023047),
+                          backgroundColor: Colors.white,
+                          padding: const EdgeInsets.all(20.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          side:
+                              const BorderSide(width: 3.0, color: Colors.black),
+                        ),
+                        child: const Align(
+                            alignment: Alignment.center,
+                            child: Text("Подтвердить темы и продолжить",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ))))
+                  ],
+                )
+            )
+        )
+    );
   }
 }

@@ -10,3 +10,4 @@ com.example.app-rs-8 C:\Users\anaas\Desktop\Articles-Today\app\build\app\generat
 com.example.app-mergeDebugResources-9 C:\Users\anaas\Desktop\Articles-Today\app\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
 com.example.app-mergeDebugResources-10 C:\Users\anaas\Desktop\Articles-Today\app\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
 com.example.app-merged_res-11 C:\Users\anaas\Desktop\Articles-Today\app\build\app\intermediates\merged_res\debug
+com.example.app-packaged_res-12 C:\Users\anaas\Desktop\Articles-Today\app\build\path_provider_android\intermediates\packaged_res\debug
